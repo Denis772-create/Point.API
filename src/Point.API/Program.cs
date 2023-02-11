@@ -1,36 +1,55 @@
+namespace Point.API;
 
-namespace Point.API
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var configuration = GetConfiguration();
+        Log.Logger = CreateSerilogLogger(configuration);
+        
+        try
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var host = BuildHost(configuration, args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            Log.Information("Applying migrations ({ApplicationName})...");
+            host.MigrateDbContext<AppDbContext>(context =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                new ShopContextSeed()
+                    .SeedAsync(context)
+                    .Wait();
+            });
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
+            Log.Information("Starting web host ({ApplicationName})...");
+            host.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationName})!");
         }
     }
+
+    public static IHost BuildHost(IConfiguration configuration, string[] args) =>
+        Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureWebHostDefaults(builder =>
+                {
+                    builder.UseStartup<Startup>();
+                })
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSerilog()
+                .Build();
+
+    private static IConfiguration GetConfiguration()
+    {
+        return new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+    }
+
+    private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+         => new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
 }
