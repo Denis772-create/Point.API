@@ -4,11 +4,11 @@ public class Discount : Entity
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public DateTime StartDate { get; private set; }
-    public DateTime ExpirationDate { get; private set; }
+    public DateTimeOffset? StartDate { get; private set; }
+    public DateTimeOffset? ExpirationDate { get; private set; }
 
-    public Discount(DateTime expirationDate, DateTime startDate,
-        string description, string name)
+    public Discount(DateTimeOffset? expirationDate, DateTimeOffset? startDate,
+        string description, string name) : base(Guid.NewGuid())
     {
         ExpirationDate = expirationDate;
         StartDate = startDate;
@@ -16,10 +16,8 @@ public class Discount : Entity
         Name = name;
     }
 
-    protected Discount() { }
-
     public void UpdateDiscountInfo(string name, string description,
-        DateTime startDate, DateTime expirationDate)
+        DateTimeOffset startDate, DateTimeOffset expirationDate)
     {
         Guard.Against.NullOrEmpty(name, nameof(name));
         Guard.Against.NullOrEmpty(description, nameof(description));

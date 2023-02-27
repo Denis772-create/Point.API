@@ -1,6 +1,6 @@
 ﻿namespace Point.Application.Queries;
 
-public class NearestShopQuery : IRequest<ShopLocationDto>
+public class NearestShopQuery : IRequest<OperationResult<ShopLocationDto>>
 {
     public Guid CompanyId { get; set; }
     public double Latitude { get; set; }
@@ -18,16 +18,16 @@ public class NearestShopQuery : IRequest<ShopLocationDto>
     }
 }
 
-public class NearestShopQueryHandler : IRequestHandler<NearestShopQuery, ShopLocationDto>
+public class NearestShopQueryHandler : IRequestHandler<NearestShopQuery, OperationResult<ShopLocationDto>>
 {
-    private readonly ICompanyRepository _companyRepository;
+    private readonly IRepository<Company> _repository;
 
-    public NearestShopQueryHandler(ICompanyRepository companyRepository)
+    public NearestShopQueryHandler(IRepository<Company> repository)
     {
-        _companyRepository = companyRepository;
+        _repository = repository;
     }
 
-    public Task<ShopLocationDto> Handle(NearestShopQuery request, CancellationToken cancellationToken)
+    public Task<OperationResult<ShopLocationDto>> Handle(NearestShopQuery request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

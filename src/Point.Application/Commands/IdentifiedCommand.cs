@@ -17,6 +17,7 @@ public class IdentifiedCommand<TRequest, TResponse>
     public Guid Id { get; }
 }
 
+// TODO: think about the need for this piece of logic
 public class IdentifiedCommandHandler<TRequest, TResponse>
     : IRequestHandler<IdentifiedCommand<TRequest, TResponse>, TResponse>
     where TRequest : IRequest<TResponse>

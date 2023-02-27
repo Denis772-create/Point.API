@@ -1,6 +1,6 @@
 ﻿namespace Point.Domain.Entities.CardTemplateAggregate;
 
-public interface ICardTemplateRepository
+public interface ICardTemplateRepository : IRepository<CardTemplate>
 {
     Task<Guid> Create(CardTemplate card, CancellationToken ct);
     Task<Guid> CreateBackgroundImage(CardImage image, CancellationToken ct);

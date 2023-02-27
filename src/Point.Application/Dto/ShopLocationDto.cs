@@ -17,7 +17,7 @@ public class ShopLocationDto
     public double Longitude { get; set; }
 
     public static ShopLocationDto MapToShopLocationDto(ShopLocation shop)
-        => new ShopLocationDto
+        => new()
         {
             BuildingNumber = shop.BuildingNumber,
             City = shop.City,

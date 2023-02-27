@@ -2,33 +2,22 @@
 
 public abstract class Entity
 {
-    private Guid _Id;
-
-    public virtual Guid Id
-    {
-        get
-        {
-            return _Id;
-        }
-        protected set
-        {
-            _Id = value;
-        }
-    }
+    public virtual Guid Id { get; protected set; }
 
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
 
-    public bool IsTransient() => Id == default(Guid);
+    public bool IsTransient() => Id == default;
 
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public DateTimeOffset CreatedAt { get; private set; }
+    public DateTimeOffset UpdatedAt { get; private set; }
 
-    protected Entity()
+    protected Entity(Guid id)
     {
+        Id = id;
         if (IsTransient())
         {
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = DateTimeOffset.Now;
             UpdatedAt = CreatedAt;
         }
     }
@@ -49,7 +38,7 @@ public abstract class Entity
 
     public void ClearDomainEvents() => _domainEvents?.Clear();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null || !(obj is Entity item))
             return false;
@@ -68,7 +57,7 @@ public abstract class Entity
 
     public override int GetHashCode() => base.GetHashCode();
 
-    public static bool operator ==(Entity left, Entity right)
+    public static bool operator ==(Entity? left, Entity? right)
     {
         if (Equals(left, null))
             return (Equals(right, null)) ? true : false;
@@ -76,5 +65,5 @@ public abstract class Entity
             return left.Equals(right);
     }
 
-    public static bool operator !=(Entity left, Entity right) => !(left == right);
+    public static bool operator !=(Entity? left, Entity? right) => !(left == right);
 }

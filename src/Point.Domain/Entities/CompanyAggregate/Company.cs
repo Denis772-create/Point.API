@@ -3,31 +3,29 @@
 public class Company : Entity, IAggregateRoot
 {
     public string Name { get; private set; }
-    public string Instagram { get; private set; }
-    public string Telegram { get; private set; }
-    public string SupportNumber { get; private set; }   
-    public Guid OwnerId { get; private set; }
+    public string? Instagram { get; private set; }
+    public string? Telegram { get; private set; }
+    public string SupportNumber { get; private set; }
 
     private readonly List<Shop> _shops;
     public IReadOnlyCollection<Shop> Shops => _shops;
+
     private readonly List<Discount> _discounts;
     public IReadOnlyCollection<Discount> Discounts => _discounts;
 
-
-    public Company(string name, Guid ownerId, string supportNumber,
-        string instagram = null, string telegram = null)
+    public Company(string name, string supportNumber,
+        string? instagram = null, string? telegram = null) : base(Guid.NewGuid())
     {
         Name = name;
         Instagram = instagram;
         Telegram = telegram;
-        OwnerId = ownerId;
         SupportNumber = supportNumber;
-        _shops = new();
-        _discounts = new();
+        _shops = new List<Shop>();
+        _discounts = new List<Discount>();
     }
 
     public void AddShop(ShopLocation location,
-        TimeOnly? openingTime = null, TimeOnly? closingTime = null, string phone = null)
+        TimeOnly? openingTime = null, TimeOnly? closingTime = null, string? phone = null)
     {
         var existingShop =
             _shops.FirstOrDefault(o => Equals(o.ShopLocation, location));
@@ -42,10 +40,8 @@ public class Company : Entity, IAggregateRoot
     {
         Guard.Against.NullOrEmpty(name, nameof(name));
         Guard.Against.NullOrEmpty(description, nameof(description));
-        Guard.Against.AgainstExpression(startDate => startDate >= DateTime.Now,
-            startDate, nameof(startDate));
-        Guard.Against.AgainstExpression(expirationDate =>expirationDate >= DateTime.Now, 
-            expirationDate, nameof(expirationDate));
+        Guard.Against.AgainstExpression(startDate => startDate >= DateTime.Now, startDate, nameof(startDate));
+        Guard.Against.AgainstExpression(expirationDate => expirationDate >= DateTime.Now, expirationDate, nameof(expirationDate));
 
         _discounts.Add(new Discount(expirationDate, startDate, description, name));
     }

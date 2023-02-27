@@ -14,7 +14,7 @@ public class Program
             Log.Information("Applying migrations ({ApplicationName})...");
             host.MigrateDbContext<AppDbContext>(context =>
             {
-                new ShopContextSeed()
+                new AppContextSeed()
                     .SeedAsync(context)
                     .Wait();
             });

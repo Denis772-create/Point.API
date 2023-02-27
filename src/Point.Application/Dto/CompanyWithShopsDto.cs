@@ -5,7 +5,7 @@ public class CompanyWithShopsDto : CompanyWithoutShopsDto
     public List<ShopDto> Shops { get; set; }
 
     public new static CompanyWithShopsDto MapFromCompany(Company company)
-        => new CompanyWithShopsDto
+        => new()
         {
             Instagram = company.Instagram,
             Name = company.Name,

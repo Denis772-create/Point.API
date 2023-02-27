@@ -6,53 +6,57 @@ public class TransactionBehaviour<TRequest, TResponse>
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
     private readonly ITransactionContext _transactionContext;
 
-    public TransactionBehaviour( ILogger<TransactionBehaviour<TRequest, TResponse>> logger,
+    public TransactionBehaviour(ILogger<TransactionBehaviour<TRequest, TResponse>> logger,
         ITransactionContext transactionContext)
     {
-        _logger = logger ?? 
+        _logger = logger ??
                   throw new ArgumentException(nameof(ILogger<TransactionBehaviour<TRequest, TResponse>>));
         _transactionContext = transactionContext ??
-                  throw new ArgumentException(nameof(ITransactionContext));
+                              throw new ArgumentException(nameof(ITransactionContext));
     }
 
     public async Task<TResponse> Handle(TRequest request,
         RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var response = default(TResponse);
-        var typeName = request.GetGenericTypeName();
-
-        try
         {
-            if (_transactionContext.HasActiveTransaction)
-            {
-                return await next();
-            }
+            if (request is not ITransactional) return await next();
 
-            var strategy = _transactionContext.DbContext.Database.CreateExecutionStrategy();
+            var response = default(TResponse);
+            var typeName = request.GetGenericTypeName();
 
-            await strategy.ExecuteAsync(async () =>
+            try
             {
-                await using var transaction = await _transactionContext.BeginTransactionAsync();
-                using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+                if (_transactionContext.HasActiveTransaction)
                 {
-                    _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})",
-                        transaction.TransactionId, typeName, request);
-
-                    response = await next();
-
-                    _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}",
-                        transaction.TransactionId, typeName);
-
-                    await _transactionContext.CommitTransactionAsync(transaction);
+                    return await next();
                 }
-            });
 
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", typeName, request);
-            throw;
+                var strategy = _transactionContext.DbContext.Database.CreateExecutionStrategy();
+
+                await strategy.ExecuteAsync(async () =>
+                {
+                    await using var transaction = await _transactionContext.BeginTransactionAsync();
+                    using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+                    {
+                        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})",
+                            transaction.TransactionId, typeName, request);
+
+                        response = await next();
+
+                        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}",
+                            transaction.TransactionId, typeName);
+
+                        await _transactionContext.CommitTransactionAsync(transaction);
+                    }
+                });
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", typeName, request);
+                throw;
+            }
         }
     }
 }

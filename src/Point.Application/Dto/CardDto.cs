@@ -13,12 +13,11 @@ public class CardDto
             CardNumber = card.CardNumber,
             CountSteps = card.CountSteps,
             IsActive = card.IsActive,
-            Template = new CardTemplateDto
+            Template = new CardTemplateDto  
             {
                 BackgroundImage = new BackgroundImageDto
                 {
-                    Id = card.CardTemplate.BackgroundImage.Id,
-                    Name = card.CardTemplate.BackgroundImage.Name,
+                    Id = card.CardTemplate.BackgroundImage.Id
                 },
                 Description = card.CardTemplate.Description,
                 MaxBonuses = card.CardTemplate.MaxBonuses,

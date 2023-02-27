@@ -13,7 +13,6 @@ public class CompanyConfiguration
             
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
-        builder.Property(x => x.OwnerId).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
         builder.Property(x => x.Name).IsRequired();
 

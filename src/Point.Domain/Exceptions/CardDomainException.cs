@@ -1,6 +1,6 @@
 ﻿namespace Point.Domain.Exceptions;
 
-public class CardDomainException : Exception
+public class CardDomainException : DomainException
 {
     public CardDomainException()
     {

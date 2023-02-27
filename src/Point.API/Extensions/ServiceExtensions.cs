@@ -1,4 +1,6 @@
-﻿namespace Point.API.Extensions;
+﻿using Point.Domain.SeedWork;
+
+namespace Point.API.Extensions;
 
 public static class ServiceExtensions
 {
@@ -96,7 +98,7 @@ public static class ServiceExtensions
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"An error occurred while migrating the database used on context {typeof(TContext).Name}");
+            logger.LogError(ex, $"An error occurred while migrating the database used on context {nameof(TContext)}");
         }
 
         return host;
@@ -106,17 +108,16 @@ public static class ServiceExtensions
         IConfiguration configuration)
     {
         services.AddSingleton(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
-        services.AddValidatorsFromAssemblyContaining(typeof(CreateCompanyCommand));
+        services.AddValidatorsFromAssemblyContaining(typeof(AddCompanyCommand));
         return services.AddMediatorModule();
     }
 
     public static IServiceCollection AddMediatorModule(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateCompanyCommand).Assembly);
+        services.AddMediatR(typeof(AddCompanyCommand).Assembly);
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
         services.AddScoped<ICardNumberGenerator, CardNumberGenerator>();
-        services.AddScoped<ICardTemplateService, CardTemplateService>();
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
         return services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
     }
@@ -125,10 +126,8 @@ public static class ServiceExtensions
         IConfiguration configuration)
     {
         services.AddDbContexts(configuration);
-        services.AddScoped<ICompanyRepository, CompanyRepository>();
-        services.AddScoped<ICardRepository, CardRepository>();
-        services.AddScoped<ICardTemplateRepository, CardTemplateRepository>();
-        services.AddScoped<ITransactionContext, ShopTransactionContext>();
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<,>));
+        services.AddScoped<ITransactionContext, TransactionContext>();
         return services.AddScoped<IRequestManager, RequestManager>();
     }
 
@@ -137,13 +136,12 @@ public static class ServiceExtensions
     {
         services.AddDbContext<AppDbContext>(opt =>
         {
-            opt.UseMySql(configuration["ConnectionStrings:AppDbConnection"],
-                new MySqlServerVersion(new Version(8, 0, 30)), sqlOpt =>
-                {
-                    sqlOpt.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name);
-                    sqlOpt.EnableRetryOnFailure(15, TimeSpan.FromSeconds(20), null);
-                    sqlOpt.UseNetTopologySuite();
-                });
+            opt.UseSqlServer(configuration["ConnectionStrings:AppDbConnection"], options =>
+            {
+                options.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name);
+                options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(20), null);
+                options.UseNetTopologySuite();
+            });
         });
         return services;
     }

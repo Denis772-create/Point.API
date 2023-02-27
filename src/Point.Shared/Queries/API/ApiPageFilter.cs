@@ -1,3 +1,7 @@
 ﻿namespace Point.Shared.Queries.API;
 
-public record ApiPageFilter(int? Offset, int? Count);
+public record ApiPageFilter : IPageFilter
+{
+    public int? Offset { get; set; }
+    public int? Count { get; set; }
+}

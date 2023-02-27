@@ -2,5 +2,10 @@
 
 public class ImageInput
 {
-    public string Name { get; set; }
+    public ImageInput(IFormFile photo)
+    {
+        Photo = photo;
+    }
+
+    public IFormFile Photo { get; set; }
 }

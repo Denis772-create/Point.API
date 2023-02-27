@@ -1,21 +1,24 @@
-// Global using directives
-
 global using System.ComponentModel.DataAnnotations;
 global using FluentValidation;
 global using MediatR;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Storage;
 global using Microsoft.Extensions.Logging;
 global using NetTopologySuite.Geometries;
-global using Point.Application.Commands.CompanyAggregate;
+global using Point.Application.Commands;
 global using Point.Application.Dto;
 global using Point.Application.Interfaces;
-global using Point.Application.Services;
+global using Point.Application.Services.Cards;
+global using Point.Domain.Entities;
 global using Point.Domain.Entities.CardAggregate;
+global using Point.Domain.Entities.CardAggregate.Specs;
 global using Point.Domain.Entities.CardTemplateAggregate;
 global using Point.Domain.Entities.CompanyAggregate;
+global using Point.Domain.Entities.CompanyAggregate.Specs;
 global using Point.Domain.Exceptions;
 global using Point.Domain.SeedWork;
+global using Point.Shared;
 global using Point.Shared.Extensions;
-global using Point.Shared.Queries.API;
+global using Point.Shared.Queries;
 global using Serilog.Context;

@@ -5,53 +5,39 @@
 public class TopologyController : BaseController
 {
     [HttpGet("all-shops/{CompanyId:Guid}")]
-    public async Task<IActionResult> AllShopLocationsByCompanyId(
-        [FromRoute] AllShopLocationsQuery query)
+    public async Task<IActionResult> AllShopLocationsByCompanyId([FromRoute] AllShopLocationsQuery query,
+        CancellationToken ct = default)
     {
-        try
-        {
-            return Ok(await Mediator.Send(query));
-        }
-        catch
-        {
-            return BadRequest();
-        }
+        var result = await Mediator.Send(query, ct);
+
+        return result.Match<IActionResult>(Ok, NotFound);
     }
 
     [HttpGet("one-shop/{shopId:Guid}")]
-    public async Task<IActionResult> ShopLocationById(
-        [FromRoute] ShopLocationQuery query)
+    public async Task<IActionResult> ShopLocationById([FromRoute] ShopLocationQuery query,
+        CancellationToken ct = default)
     {
-        try
-        {
-            return Ok(await Mediator.Send(query));
-        }
-        catch
-        {
-            return BadRequest();
-        }
+        var result = await Mediator.Send(query, ct);
+
+        return result.Match<IActionResult>(Ok, NotFound);
     }
 
     [HttpGet("nearest-shop")]
-    public async Task<IActionResult> GetNearestShop(
-        [FromBody] NearestShopQuery query)
+    public async Task<IActionResult> GetNearestShop([FromBody] NearestShopQuery query,
+        CancellationToken ct = default)
     {
-        try
-        {
-            return Ok(await Mediator.Send(query));
-        }
-        catch
-        {
-            return BadRequest();
-        }
+
+        var result = await Mediator.Send(query, ct);
+
+        return result.Match<IActionResult>(Ok, NotFound);
     }
 
-    [HttpGet("specific-area/{companyId:Guid}")]
-    public async Task<IActionResult> GetNearestShopsInSpecificArea(
-        [FromBody] NearestShopsInSpecificAreaQuery query,
-        [FromRoute] Guid companyId)
+    [HttpGet("specific-area")]
+    public async Task<IActionResult> GetNearestShopsInSpecificArea([FromBody] NearestShopsInSpecificAreaQuery query,
+        CancellationToken ct = default)
     {
-        // TODO: implement it
-        return Ok();
+        var result = await Mediator.Send(query, ct);
+
+        return result.Match<IActionResult>(Ok, NotFound);
     }
 }

@@ -1,6 +1,4 @@
-﻿using Point.Application.Interfaces;
-
-namespace Point.Infrastructure.Idempotency;
+﻿namespace Point.Infrastructure.Idempotency;
 
 public class RequestManager : IRequestManager
 {
@@ -13,7 +11,7 @@ public class RequestManager : IRequestManager
     {
         var exists = await ExistAsync(id);
         var request = exists
-            ? throw new ShopDomainException($"Request with {id} already exists")
+            ? throw new DomainException($"Request with {id} already exists")
             : new ClientRequest
             {
                 Id = id,

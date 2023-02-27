@@ -3,8 +3,8 @@
 public class CompanyWithoutShopsDto
 {
     public string Name { get; set; }
-    public string Instagram { get; set; }
-    public string Telegram { get; set; }
+    public string? Instagram { get; set; }
+    public string? Telegram { get; set; }
     public string SupportNumber { get; set; }
 
     public static CompanyWithoutShopsDto MapFromCompany(Company company)

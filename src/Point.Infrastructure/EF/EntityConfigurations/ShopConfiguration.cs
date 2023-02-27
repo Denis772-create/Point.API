@@ -12,8 +12,18 @@ public class ShopConfiguration
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
         builder.Property(x => x.CompanyId).IsRequired();
-        builder.Property(x => x.OpeningTime).HasColumnType("time(3)");
-        builder.Property(x => x.ClosingTime).HasColumnType("time(3)");
+
+        builder.Property(x => x.OpeningTime)
+            .HasConversion(timeOnly => timeOnly.ToString(),
+                stringTimeOnly => stringTimeOnly == null
+                    ? null
+                    : TimeOnly.Parse(stringTimeOnly));
+
+        builder.Property(x => x.ClosingTime)
+            .HasConversion(timeOnly => timeOnly.ToString(),
+                stringTimeOnly => stringTimeOnly == null
+                    ? null
+                    : TimeOnly.Parse(stringTimeOnly));
 
         builder.OwnsOne(b => b.ShopLocation, a =>
         {

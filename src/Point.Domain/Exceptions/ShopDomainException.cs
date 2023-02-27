@@ -1,6 +1,6 @@
 ﻿namespace Point.Domain.Exceptions;
 
-public class ShopDomainException : Exception
+public class ShopDomainException : DomainException
 {
     public ShopDomainException()
     {

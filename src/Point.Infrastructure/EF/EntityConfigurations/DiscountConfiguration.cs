@@ -16,7 +16,6 @@ public class DiscountConfiguration
         builder.Property(x => x.Name).IsRequired();
         builder.Property(x => x.StartDate).IsRequired(false);
         builder.Property(x => x.ExpirationDate).IsRequired(false);
-
     }
 }
 

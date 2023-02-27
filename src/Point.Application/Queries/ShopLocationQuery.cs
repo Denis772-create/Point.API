@@ -1,6 +1,6 @@
 ﻿namespace Point.Application.Queries;
 
-public class ShopLocationQuery : IRequest<ShopLocationDto>
+public class ShopLocationQuery : IRequest<OperationResult<ShopLocationDto>>
 {
     public Guid ShopId { get; set; }
 
@@ -13,24 +13,29 @@ public class ShopLocationQuery : IRequest<ShopLocationDto>
 }
 
 public class ShopLocationQueryHandler
-    : IRequestHandler<ShopLocationQuery, ShopLocationDto>
+    : IRequestHandler<ShopLocationQuery, OperationResult<ShopLocationDto>>
 {
-    private readonly ICompanyRepository _companyRepository;
+    private readonly IRepository<Company> _repository;
 
-    public ShopLocationQueryHandler(ICompanyRepository companyRepository)
+    public ShopLocationQueryHandler(IRepository<Company> repository)
     {
-        _companyRepository = companyRepository;
+        _repository = repository;
     }
 
-    public async Task<ShopLocationDto> Handle(ShopLocationQuery request,
-        CancellationToken cancellationToken)
+    public async Task<OperationResult<ShopLocationDto>> Handle(ShopLocationQuery request, CancellationToken ct)
     {
-        var shoplocation = await _companyRepository
-            .GetShopLocationAsync(request.ShopId);
+        var shopLocation = await _repository
+            .FirstOrDefaultAsync(new OneShopLocationSpec(request.ShopId), ct);
 
-        if (shoplocation != null)
-            return ShopLocationDto.MapToShopLocationDto(shoplocation);
+        if (shopLocation != null)
+        {
+            var shopLocationDto = ShopLocationDto
+                .MapToShopLocationDto(shopLocation.Shops
+                    .First(x => x.Id == request.ShopId).ShopLocation);
 
-        throw new ShopDomainException("Companies not found");
+            return OperationResult<ShopLocationDto>.Success(shopLocationDto);
+        }
+
+        return OperationResult<ShopLocationDto>.Failure(ValidationErrors.DoesNotExist("Companies"));
     }
 }

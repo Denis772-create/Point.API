@@ -1,5 +1,3 @@
-// Global using directives
-
 global using System.Data.SqlClient;
 global using System.Net;
 global using System.Text.Json;
@@ -20,18 +18,19 @@ global using Point.API.Helpers;
 global using Point.API.Infrastructure.ActionResults;
 global using Point.API.Infrastructure.Filters;
 global using Point.Application.Behaviors;
-global using Point.Application.Commands.CompanyAggregate;
+global using Point.Application.Commands.Cards;
+global using Point.Application.Commands.Companies;
 global using Point.Application.Dto;
 global using Point.Application.Interfaces;
 global using Point.Application.Queries;
+global using Point.Application.Queries.Cards;
+global using Point.Application.Queries.Companies;
 global using Point.Application.Services;
-global using Point.Domain.Entities.CardAggregate;
-global using Point.Domain.Entities.CardTemplateAggregate;
-global using Point.Domain.Entities.CompanyAggregate;
 global using Point.Domain.Exceptions;
 global using Point.Infrastructure.EF;
 global using Point.Infrastructure.Idempotency;
 global using Point.Infrastructure.Repositories;
+global using Point.Shared.Queries;
 global using Point.Shared.Queries.API;
 global using Polly;
 global using Serilog;
