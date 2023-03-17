@@ -1,0 +1,12 @@
+global using Ardalis.GuardClauses;
+global using Ardalis.Specification;
+global using FluentValidation.Results;
+global using MediatR;
+global using Point.Domain.Entities.CardAggregate;
+global using Point.Domain.Entities.CardTemplateAggregate;
+global using Point.Domain.Entities.CompanyAggregate;
+global using Point.Domain.SeedWork;
+global using Point.Shared;
+global using Point.Shared.Extensions;
+global using Point.Shared.Queries;
+global using Topology = NetTopologySuite.Geometries;
