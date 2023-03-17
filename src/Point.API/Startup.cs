@@ -2,31 +2,37 @@
 
 public class Startup
 {
-    public Startup(IConfiguration configuration)
-        => Configuration = configuration;
+    public Startup(IConfiguration configuration) => Configuration = configuration;
 
     private IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddApiConfiguration()
+        var apiConfiguration = Configuration.GetSection(nameof(ApiConfiguration)).Get<ApiConfiguration>();
+        services.AddSingleton(apiConfiguration ?? throw new ArgumentNullException(nameof(ApiConfiguration)));
+
+        services.AddOptions()
+                .AddApiConfiguration()
                 .AddCustomHealthCheck(Configuration)
                 .ConfigureApiVersions()
-                .ConfigureSwagger()
+                .ConfigureSwagger(apiConfiguration)
                 .AddApplicationLayer(Configuration)
                 .AddInfrastructureLayer(Configuration);
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, ApiConfiguration apiConfig)
     {
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseSerilogRequestLogging();
-        app.UseSwagger();
-        app.UseSwaggerUI(s =>
-        {
-            s.SwaggerEndpoint("/swagger/v1/swagger.json", "Point.Shop API v1");
-        });
+        app.UseSwagger()
+           .UseSwaggerUI(opt =>
+           {
+               opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Point.Shop API v1");
+               opt.OAuthClientId(apiConfig.OidcSwaggerUIClientId);
+               opt.OAuthAppName(apiConfig.ApiName);
+               opt.OAuthUsePkce();
+           });
 
         app.UseEndpoints(endpoints =>
         {
@@ -35,10 +41,6 @@ public class Startup
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-            {
-                Predicate = healthCheckRegistration => healthCheckRegistration.Name.Contains("self")
             });
         });
     }

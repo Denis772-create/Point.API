@@ -1,6 +1,4 @@
-﻿using Point.Domain.SeedWork;
-
-namespace Point.API.Extensions;
+﻿namespace Point.API.Extensions;
 
 public static class ServiceExtensions
 {
@@ -32,40 +30,34 @@ public static class ServiceExtensions
                            new[] { "shop-db" })
                    .Services;
 
-    public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
-      => services.AddSwaggerGen(s =>
+    public static IServiceCollection ConfigureSwagger(this IServiceCollection services, ApiConfiguration apiConfiguration)
+      => services.AddSwaggerGen(options =>
       {
-          s.SwaggerDoc("v1", new OpenApiInfo
+          options.SwaggerDoc("v1", new OpenApiInfo
           {
               Title = "Point API",
               Version = "v1",
               Description = "Service Shop for Point proj",
           });
 
-          s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+          options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
           {
-              In = ParameterLocation.Header,
-              Description = "Place to add JWT with Bearer",
-              Name = "Authorization",
-              Type = SecuritySchemeType.ApiKey,
-              Scheme = "Bearer"
-          });
+              Type = SecuritySchemeType.OAuth2,
+              Flows = new OpenApiOAuthFlows
+              {
+                  AuthorizationCode = new OpenApiOAuthFlow
+                  {
+                      AuthorizationUrl = new Uri($"{apiConfiguration.IdentityServerBaseUrl}/connect/authorize"),
+                      TokenUrl = new Uri($"{apiConfiguration.IdentityServerBaseUrl}/connect/token"),
+                      Scopes = new Dictionary<string, string>
+                      {
+                          { apiConfiguration.OidcApiName, apiConfiguration.ApiName }
+                      }
 
-          s.AddSecurityRequirement(new OpenApiSecurityRequirement
-               {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                },
-                                Name = "Bearer",
-                            },
-                            new List<string>()
-                        }
-               });
+                  }
+              }
+          });
+          options.OperationFilter<AuthorizeCheckOperationFilter>();
       });
 
     public static IHost MigrateDbContext<TContext>(this IHost host, Action<TContext> seeder)

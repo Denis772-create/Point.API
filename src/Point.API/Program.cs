@@ -9,7 +9,7 @@ public class Program
         
         try
         {
-            var host = BuildHost(configuration, args);
+            var host = BuildHost(args);
 
             Log.Information("Applying migrations ({ApplicationName})...");
             host.MigrateDbContext<AppDbContext>(context =>
@@ -28,7 +28,7 @@ public class Program
         }
     }
 
-    public static IHost BuildHost(IConfiguration configuration, string[] args) =>
+    public static IHost BuildHost(string[] args) =>
         Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(builder =>
