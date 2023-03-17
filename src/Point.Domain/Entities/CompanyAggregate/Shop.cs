@@ -1,4 +1,6 @@
-﻿namespace Point.Domain.Entities.CompanyAggregate;
+﻿using NetTopologySuite.Geometries;
+
+namespace Point.Domain.Entities.CompanyAggregate;
 
 public class Shop : Entity
 {
@@ -38,5 +40,19 @@ public class Shop : Entity
     {
         OpeningTime = openingTime;
         ClosingTime = closingTime;
+    }
+
+    public void UpdateLocation(ShopLocation? location)
+    {
+        ShopLocation = location;
+    }
+
+    public void Update(string phone, ShopLocation? location, TimeOnly? openingTime, TimeOnly? closingTime)
+    {
+        Guard.Against.NullOrEmpty(phone, nameof(phone));
+
+        Phone = phone;
+        UpdateLocation(location);
+        UpdateWorkingTime(openingTime, closingTime);
     }
 }

@@ -1,6 +1,4 @@
-﻿using FluentValidation.Results;
-
-namespace Point.Domain.Exceptions;
+﻿namespace Point.Domain.Exceptions;
 
 public static class ValidationErrors
 {

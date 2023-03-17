@@ -6,7 +6,14 @@ public class CardConfiguration
     public void Configure(EntityTypeBuilder<Card> builder)
     {
         builder.ToTable("Cards");
-        builder.Property(cr => cr.QrCode).HasMaxLength(300);
-        builder.Property(cr => cr.CardNumber).HasMaxLength(20);
+        builder.Property(cr => cr.CardNumber).HasMaxLength(12);
+
+
+        builder.OwnsOne(c => c.QrCode, a =>
+        {
+	        a.Property(x => x.Code)
+		        .IsRequired()
+		        .HasMaxLength(300);
+        });
     }
 }

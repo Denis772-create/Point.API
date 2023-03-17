@@ -39,19 +39,19 @@ public class EfRepository<T, TContext> : IRepository<T>
         _dbContext.Set<T>().Remove(entity);
     }
 
-    public virtual async Task<T?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+    public virtual async Task<T?> GetByIdAsync<TId>(TId id, CancellationToken ct = default) where TId : notnull
     {
-        return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+        return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken: ct);
     }
 
-    public virtual async Task<T?> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+    public virtual async Task<T?> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken ct = default)
     {
-        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+        return await ApplySpecification(specification).FirstOrDefaultAsync(ct);
     }
 
-    public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
+    public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken ct = default)
     {
-        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+        return await ApplySpecification(specification).FirstOrDefaultAsync(ct);
     }
 
     public virtual async Task<T?> SingleOrDefaultAsync(ISingleResultSpecification<T> specification, CancellationToken cancellationToken = default)
