@@ -2,20 +2,20 @@
 
 namespace Point.Application.Queries.Companies;
 
-public class GetAllCompaniesWithoutShopsQuery : PageFilter, IRequest<OperationResult<List<CompanyWithoutShopsDto>>>
+public class GetAllCompaniesWithoutShopsQuery : PageFilter, IRequest<OperationResult<List<CompanyDto>>>
 {
 
 }
 
 public class GetAllCompaniesWithoutShopsQueryHandler
-    : IRequestHandler<GetAllCompaniesWithoutShopsQuery, OperationResult<List<CompanyWithoutShopsDto>>>
+    : IRequestHandler<GetAllCompaniesWithoutShopsQuery, OperationResult<List<CompanyDto>>>
 {
     private readonly IRepository<Company> _repository;
 
     public GetAllCompaniesWithoutShopsQueryHandler(IRepository<Company> repository)
         => _repository = repository;
 
-    public async Task<OperationResult<List<CompanyWithoutShopsDto>>> Handle(GetAllCompaniesWithoutShopsQuery request,
+    public async Task<OperationResult<List<CompanyDto>>> Handle(GetAllCompaniesWithoutShopsQuery request,
         CancellationToken ct)
     {
         var companies = await _repository.ListAsync(new CompaniesWithoutShops(request), ct);
@@ -23,12 +23,12 @@ public class GetAllCompaniesWithoutShopsQueryHandler
         if (companies.Any())
         {
             var companiesPage = companies
-                .Select(CompanyWithoutShopsDto.MapFromCompany).ToList();
+                .Select(x => x.ToDto()).ToList();
 
-            return OperationResult<List<CompanyWithoutShopsDto>>.Success(companiesPage);
+            return OperationResult<List<CompanyDto>>.Success(companiesPage);
         }
 
-        return OperationResult<List<CompanyWithoutShopsDto>>
+        return OperationResult<List<CompanyDto>>
             .Failure(new Fluent.ValidationResult(new[]
             {
                 new Fluent.ValidationFailure("", "Companies not found")

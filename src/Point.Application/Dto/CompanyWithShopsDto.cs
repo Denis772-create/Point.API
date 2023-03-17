@@ -1,6 +1,6 @@
 ﻿namespace Point.Application.Dto;
 
-public class CompanyWithShopsDto : CompanyWithoutShopsDto
+public class CompanyWithShopsDto : CompanyDto
 {
     public List<ShopDto> Shops { get; set; }
 

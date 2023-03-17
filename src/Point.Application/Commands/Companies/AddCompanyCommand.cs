@@ -3,10 +3,13 @@
 public class AddCompanyCommand : TransactionalCommand<OperationResult<Guid>>
 
 {
-    public string Name { get; set; }
-    public string? Instagram { get; set; }
-    public string? Telegram { get; set; }
-    public string SupportNumber { get; set; }
+    public AddCompanyCommand(CompanyDto input, Guid ownerId)
+    {
+        Input = input;
+        OwnerId = ownerId;
+    }
+
+    public CompanyDto Input { get; set; }
     public Guid OwnerId { get; set; }
 
     public class CreateCompanyCommandValidator
@@ -15,7 +18,6 @@ public class AddCompanyCommand : TransactionalCommand<OperationResult<Guid>>
         public CreateCompanyCommandValidator()
         {
             RuleFor(x => x.OwnerId).NotEqual(Guid.Empty);
-            RuleFor(x => x.Name).NotNull().NotEmpty();
         }
     }
 }
@@ -30,10 +32,10 @@ public class AddCompanyCommandHandler : IRequestHandler<AddCompanyCommand, Opera
     public Task<OperationResult<Guid>> Handle(AddCompanyCommand request,
         CancellationToken cancellationToken)
     {
-        var newCompany = new Company(request.Name,
-            request.SupportNumber,
-            request.Instagram,
-            request.Telegram);
+        var newCompany = new Company(request.Input.Name,
+            request.Input.SupportNumber,
+            request.Input.Instagram,
+            request.Input.Telegram);
 
         _repository.Add(newCompany);
 
