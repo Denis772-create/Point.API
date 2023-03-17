@@ -4,7 +4,7 @@ public class QrCodeGenerator : IQrCodeGenerator
 {
     public string CreateQrCode(string inputData)
     {
-        // TODO: implement
-        return Guid.NewGuid().ToString();
+        var qrGenerator = new QrCodeGenerator();
+        return qrGenerator.CreateQrCode(inputData); 
     }
 }

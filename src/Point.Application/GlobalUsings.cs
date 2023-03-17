@@ -1,4 +1,5 @@
 global using System.ComponentModel.DataAnnotations;
+global using AutoMapper;
 global using FluentValidation;
 global using MediatR;
 global using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ global using NetTopologySuite.Geometries;
 global using Point.Application.Commands;
 global using Point.Application.Dto;
 global using Point.Application.Interfaces;
+global using Point.Application.Mappers;
 global using Point.Application.Services.Cards;
 global using Point.Domain.Entities;
 global using Point.Domain.Entities.CardAggregate;

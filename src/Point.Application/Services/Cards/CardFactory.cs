@@ -21,8 +21,8 @@ public class CardFactory
         var cardNumber = _cardNumberGenerator.GenerateCardNumber(cardDto.UserId);
         card.AddCardNumber(cardNumber);
 
-        var qrCode = _qRCodeGenerator.CreateQrCode("inputData"); // TODO: QR generation
-        card.UpdateQrCode(qrCode);
+        var qrCode = _qRCodeGenerator.CreateQrCode(cardNumber);
+        card.UpdateQrCode(new QrCode(qrCode));
 
         return OperationResult<Card>.Success(card);
     }
