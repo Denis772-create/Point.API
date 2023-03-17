@@ -12,6 +12,16 @@ public class CardController : BaseController
             validation => Task.FromResult<IActionResult>(BadRequest(validation)));
     }
 
+    [HttpPut("{cardId:guid}")]
+    public async Task<IActionResult> Update([FromQuery] Guid cardId, [FromBody] CardDto cardDto, CancellationToken ct = default)
+    {
+        var result = await Mediator.Send(new UpdateCardCommand(cardDto, cardId), ct);
+
+        return await result.MatchAsync(
+            id => GetOne(id, ct),
+            validation => Task.FromResult<IActionResult>(BadRequest(validation)));
+    }
+
     [HttpPost("{cardId:guid}/bonuses")]
     public async Task<IActionResult> NewBonuses([FromRoute] Guid cardId, [FromBody] BonusesInput input,
         CancellationToken ct = default)
