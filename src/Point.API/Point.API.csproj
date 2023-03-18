@@ -9,27 +9,28 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Serilog" Version="2.12.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.0.0-dev-00265" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.1-dev-00787" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.1-dev-00296" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
-    <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0-beta.11" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
