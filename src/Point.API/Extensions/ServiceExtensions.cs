@@ -110,6 +110,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddMediatorModule(this IServiceCollection services)
     {
         services.AddMediatR(typeof(AddCompanyCommand).Assembly);
+
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RetryBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
