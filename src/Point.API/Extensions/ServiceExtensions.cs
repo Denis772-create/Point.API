@@ -99,6 +99,9 @@ public static class ServiceExtensions
     public static IServiceCollection AddApplicationLayer(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<ICardNumberGenerator, CardNumberGenerator>();
+        services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
+
         services.AddSingleton(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
         services.AddValidatorsFromAssemblyContaining(typeof(AddCompanyCommand));
         return services.AddMediatorModule();
@@ -108,10 +111,10 @@ public static class ServiceExtensions
     {
         services.AddMediatR(typeof(AddCompanyCommand).Assembly);
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
-        services.AddScoped<ICardNumberGenerator, CardNumberGenerator>();
-        services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
-        return services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(PrincipalSetterBehavior<,>));
+        return services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UserInfoUpdaterBehavior<,>));
     }
 
     public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services,

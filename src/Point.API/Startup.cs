@@ -11,6 +11,9 @@ public class Startup
         var apiConfiguration = Configuration.GetSection(nameof(ApiConfiguration)).Get<ApiConfiguration>();
         services.AddSingleton(apiConfiguration ?? throw new ArgumentNullException(nameof(ApiConfiguration)));
 
+        services.AddHttpContextAccessor();
+        services.AddScoped<IPrincipalProvider, HttpContextPrincipalProvider>();
+
         services.AddOptions()
                 .AddApiConfiguration()
                 .AddCustomHealthCheck(Configuration)

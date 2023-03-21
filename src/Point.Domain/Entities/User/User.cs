@@ -1,8 +1,8 @@
-﻿namespace Point.Domain.Entities;
+﻿namespace Point.Domain.Entities.User;
 
 public class User : Entity, IAggregateRoot
 {
-    public User() : base(Guid.NewGuid())
+    public User(Guid id) : base(id)
     { }
 
     /// <summary>

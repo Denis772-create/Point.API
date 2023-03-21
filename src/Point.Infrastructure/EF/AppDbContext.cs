@@ -1,4 +1,6 @@
-﻿namespace Point.Infrastructure.EF;
+﻿using Point.Domain.Entities.User;
+
+namespace Point.Infrastructure.EF;
 
 public class AppDbContext : DbContext, IUnitOfWork, IStoredProcedureRepository
 {
@@ -11,7 +13,7 @@ public class AppDbContext : DbContext, IUnitOfWork, IStoredProcedureRepository
     public DbSet<Card> Cards { get; set; } = null!;
     public DbSet<CardImage> CardImages{ get; set; } = null!;
     public DbSet<CardTemplate> CardTemplates{ get; set; } = null!;
-    public DbSet<Event> Events { get; set; } = null!;
+    public DbSet<EfEvent> Events { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
 
 
@@ -37,8 +39,7 @@ public class AppDbContext : DbContext, IUnitOfWork, IStoredProcedureRepository
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
         await _mediator.DispatchDomainEventsAsync(this);
-        var result = await SaveChangesAsync(cancellationToken);
-        return result > 0;
+        return await SaveChangesAsync(cancellationToken) > 0;
     }
 
     public async Task<IEnumerable<T>> ExecuteStoredProcedure<T>(string storedProcedureName,

@@ -1,3 +1,4 @@
+global using System.Security.Claims;
 global using Ardalis.GuardClauses;
 global using Ardalis.Specification;
 global using FluentValidation.Results;
@@ -5,6 +6,8 @@ global using MediatR;
 global using Point.Domain.Entities.CardAggregate;
 global using Point.Domain.Entities.CardTemplateAggregate;
 global using Point.Domain.Entities.CompanyAggregate;
+global using Point.Domain.Entities.User.Events;
+global using Point.Domain.Interfaces;
 global using Point.Domain.SeedWork;
 global using Point.Shared;
 global using Point.Shared.Extensions;

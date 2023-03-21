@@ -1,8 +1,8 @@
 ﻿namespace Point.Domain.Entities;
 
-public class Event : Entity, IAggregateRoot
+public class EfEvent : Entity, IAggregateRoot
 {
-    public Event() : base(Guid.NewGuid()) { }
+    public EfEvent() : base(Guid.NewGuid()) { }
 
     public DateTimeOffset Timestamp { get; set; }
 

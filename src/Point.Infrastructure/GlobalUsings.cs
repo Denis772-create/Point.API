@@ -1,4 +1,5 @@
 global using System.Data;
+global using System.Security.Claims;
 global using Azure.Storage;
 global using Azure.Storage.Blobs;
 global using Azure.Storage.Blobs.Models;

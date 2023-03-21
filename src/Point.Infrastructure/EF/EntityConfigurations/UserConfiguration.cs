@@ -1,4 +1,6 @@
-﻿namespace Point.Infrastructure.EF.EntityConfigurations;
+﻿using Point.Domain.Entities.User;
+
+namespace Point.Infrastructure.EF.EntityConfigurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

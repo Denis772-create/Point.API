@@ -1,8 +1,8 @@
 ﻿namespace Point.Infrastructure.EF.EntityConfigurations;
 
-public class EventConfiguration : IEntityTypeConfiguration<Event>
+public class EventConfiguration : IEntityTypeConfiguration<EfEvent>
 {
-    public void Configure(EntityTypeBuilder<Event> builder)
+    public void Configure(EntityTypeBuilder<EfEvent> builder)
     {
         builder.ToTable("Events");
         builder.HasKey(x => x.Id);
