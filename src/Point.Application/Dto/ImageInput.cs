@@ -1,4 +1,6 @@
-﻿namespace Point.Application.Dto;
+﻿using Point.Application.Attributes;
+
+namespace Point.Application.Dto;
 
 public class ImageInput
 {
@@ -7,5 +9,6 @@ public class ImageInput
         Photo = photo;
     }
 
+    [ImageValidation]
     public IFormFile Photo { get; set; }
 }
