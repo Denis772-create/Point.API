@@ -3,22 +3,21 @@ using Ardalis.Specification.EntityFrameworkCore;
 
 namespace Point.Infrastructure.Repositories;
 
-public class EfRepository<T, TContext> : IRepository<T>
+public class EfRepository<T> : IRepository<T>
     where T : class, IAggregateRoot
-    where TContext : DbContext, IUnitOfWork
 {
     public IUnitOfWork UnitOfWork => _dbContext;
 
 
-    private readonly TContext _dbContext;
+    private readonly AppDbContext _dbContext;
     private readonly ISpecificationEvaluator _specificationEvaluator;
 
-    public EfRepository(TContext dbContext)
+    public EfRepository(AppDbContext dbContext)
         : this(dbContext, SpecificationEvaluator.Default)
     {
     }
 
-    public EfRepository(TContext dbContext, ISpecificationEvaluator specificationEvaluator)
+    public EfRepository(AppDbContext dbContext, ISpecificationEvaluator specificationEvaluator)
     {
         _dbContext = dbContext;
         _specificationEvaluator = specificationEvaluator;

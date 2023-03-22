@@ -12,7 +12,7 @@ public class CardFactory
         _qRCodeGenerator = qRCodeGenerator;
     }
 
-    public OperationResult<Card>TryCreate(CreateCardDto cardDto)
+    public OperationResult<Card> TryCreate(CreateCardDto cardDto)
     {
         // TODO: business validation 
 

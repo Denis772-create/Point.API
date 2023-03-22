@@ -17,7 +17,7 @@ public class CardDto
             {
                 BackgroundImage = new BackgroundImageDto
                 {
-                    Id = card.CardTemplate.BackgroundImage.Id
+                    Id = card.CardTemplate.BackgroundImageId
                 },
                 Description = card.CardTemplate.Description,
                 MaxBonuses = card.CardTemplate.MaxBonuses,

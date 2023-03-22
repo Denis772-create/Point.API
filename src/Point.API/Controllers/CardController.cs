@@ -34,7 +34,7 @@ public class CardController : BaseController
     }
 
     [ProducesResponseType(typeof(IPage<CardDto>), 200)]
-    [HttpGet("{userId:guid}")]
+    [HttpGet("user/{userId:guid}")]
     public async Task<IActionResult> PageByUserId([FromRoute] Guid userId, ApiPageFilter filter,
         CancellationToken ct = default)
     {
@@ -56,7 +56,7 @@ public class CardController : BaseController
         return result.Match<IActionResult>(Ok, NotFound);
     }
 
-    [HttpGet("{cardNumber}")]
+    [HttpGet("card-number/{cardNumber}")]
     public async Task<IActionResult> GetByCardNumber(string cardNumber, CancellationToken ct = default)
     {
         var result = await Mediator.Send(new GetCardByNumberQuery(cardNumber), ct);

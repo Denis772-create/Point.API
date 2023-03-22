@@ -11,8 +11,14 @@ public class Startup
         var apiConfiguration = Configuration.GetSection(nameof(ApiConfiguration)).Get<ApiConfiguration>();
         services.AddSingleton(apiConfiguration ?? throw new ArgumentNullException(nameof(ApiConfiguration)));
 
+        services.Configure<QrCodeOptions>(Configuration.GetSection(nameof(QrCodeOptions)));
+
         services.AddHttpContextAccessor();
+
         services.AddScoped<IPrincipalProvider, HttpContextPrincipalProvider>();
+        services.AddScoped<UserInfoUpdater>();
+        services.AddScoped<CardFactory>();
+        services.AddScoped<IPhotoService, AzurePhotoService>();
 
         services.AddOptions()
                 .AddApiConfiguration()

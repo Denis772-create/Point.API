@@ -1,6 +1,6 @@
 ﻿namespace Point.Domain.Entities.CardAggregate.Specs;
 
-public sealed class ByNumberSpec : Specification<Card>
+public sealed class ByNumberSpec : Specification<Card>  
 {
     public ByNumberSpec(string cardNumber)
     {
