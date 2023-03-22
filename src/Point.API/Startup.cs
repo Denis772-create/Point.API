@@ -20,7 +20,8 @@ public class Startup
                 .ConfigureApiVersions()
                 .ConfigureSwagger(apiConfiguration)
                 .AddApplicationLayer(Configuration)
-                .AddInfrastructureLayer(Configuration);
+                .AddInfrastructureLayer(Configuration)
+                .AddAuthentication(Configuration);
     }
 
     public void Configure(IApplicationBuilder app, ApiConfiguration apiConfig)
@@ -28,6 +29,10 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseSerilogRequestLogging();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseSwagger()
            .UseSwaggerUI(opt =>
            {

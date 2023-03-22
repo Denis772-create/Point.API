@@ -13,10 +13,10 @@ public class UserInfoUpdaterBehavior<TRequest, TResponse> : IPipelineBehavior<TR
     {
         var isCommand = request.GetType()
             .GetInterfaces()
-            .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ITransactional));
+            .Any(i => i == typeof(ITransactional));
 
         if (isCommand) await _userInfoUpdater.PropagateCurrentUserInfo(cancellationToken);
 
-        return await next.Invoke();
+        return await next();
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Point.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class BaseController : ControllerBase

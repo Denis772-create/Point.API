@@ -4,6 +4,7 @@ public record UserInfoRetrieved(
     DateTimeOffset Timestamp,
     Guid UserId,
     string NameIdentifier,
+    string Email,
     string? GivenName,
     string? Surname,
     string? PrincipalName) : Event(Guid.NewGuid(), Timestamp);

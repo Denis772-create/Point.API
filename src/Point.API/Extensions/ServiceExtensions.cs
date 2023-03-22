@@ -36,8 +36,7 @@ public static class ServiceExtensions
           options.SwaggerDoc("v1", new OpenApiInfo
           {
               Title = "Point API",
-              Version = "v1",
-              Description = "Service Shop for Point proj",
+              Version = "v1"
           });
 
           options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -123,7 +122,7 @@ public static class ServiceExtensions
         IConfiguration configuration)
     {
         services.AddDbContexts(configuration);
-        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<,>));
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<ITransactionContext, TransactionContext>();
         return services.AddScoped<IRequestManager, RequestManager>();
     }
@@ -141,5 +140,21 @@ public static class ServiceExtensions
             });
         });
         return services;
+    }
+
+    public static IServiceCollection AddAuthentication(this IServiceCollection service, IConfiguration configuration)
+    {
+        var apiConfig = configuration.GetSection(nameof(ApiConfiguration))
+            .Get<ApiConfiguration>() ?? throw new ArgumentNullException(nameof(ApiConfiguration), "ApiConfiguration cannot be null.");
+
+        service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = apiConfig.IdentityServerBaseUrl;
+                options.RequireHttpsMetadata = apiConfig.RequireHttpsMetadata;
+                options.Audience = apiConfig.OidcApiName;
+            });
+
+        return service;
     }
 }

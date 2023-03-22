@@ -5,7 +5,7 @@ public class UserEventHandler
 {
     private readonly IRepository<User> _repository;
 
-    public UserEventHandler(IRepository<User> repository, IUnitOfWork unitOfWork)
+    public UserEventHandler(IRepository<User> repository)
     {
         _repository = repository;
     }
@@ -24,7 +24,7 @@ public class UserEventHandler
 
         user.NameIdentifier = e.NameIdentifier;
         user.UserPrincipalName = e.PrincipalName;
-        user.Email = e.PrincipalName;
+        user.Email = e.Email;
         user.DisplayName = BuildDisplayName(e.GivenName, e.Surname);
         user.LastUpdated = DateTime.UtcNow;
 

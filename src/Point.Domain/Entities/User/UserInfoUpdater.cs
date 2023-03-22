@@ -19,6 +19,7 @@ public class UserInfoUpdater
             DateTimeOffset.Now,
             currentUserInfo.Id,
             currentUserInfo.NameIdentifier,
+            currentUserInfo.Email,
             currentUserInfo.GivenName,
             currentUserInfo.Surname,
             currentUserInfo.PrincipalName);
