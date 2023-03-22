@@ -21,12 +21,12 @@ public class AddImageCommandHandler : IRequestHandler<AddImageCommand, Operation
         _photoService = photoService;
     }
 
-    public async Task<OperationResult<Guid>> Handle(AddImageCommand request, CancellationToken cancellationToken)
+    public async Task<OperationResult<Guid>> Handle(AddImageCommand request, CancellationToken ct)
     {
         // TODO: validation
-        var photoId = await _photoService.AddPhotoAsync(request.Input.Photo);
+        var photoId = await _photoService.AddPhotoAsync(request.Input.Photo, ct);
 
-        var newImage = new CardImage(photoId, true);
+        var newImage = new CardImage(photoId, request.Input.IsShared);
 
         _repository.Add(newImage);
         return OperationResult<Guid>.Success(photoId);

@@ -2,8 +2,8 @@
 
 public interface IPhotoService
 {
-    Task<IEnumerable<string>> GetPhotoUrlsAsync(Guid[] ids);
-    Task<string> GetPhotoUrlByIdAsync(Guid id);
-    Task<Guid> AddPhotoAsync(IFormFile photo);
-    Task<bool> RemovePhotoAsync(Guid id);
+    Task<IEnumerable<string>> GetPhotoUrlsAsync(Guid[] ids, CancellationToken ct);
+    Task<string?> GetPhotoUrlByIdAsync(Guid id, CancellationToken ct);
+    Task<Guid> AddPhotoAsync(IFormFile photo, CancellationToken ct);
+    Task<bool> RemovePhotoAsync(Guid id, CancellationToken ct);
 }

@@ -14,7 +14,7 @@ public class CreateCardTemplateCommandHandler : IRequestHandler<CreateCardTempla
 {
     private readonly IRepository<CardTemplate> _repository;
 
-    public CreateCardTemplateCommandHandler(ICardTemplateRepository repository)
+    public CreateCardTemplateCommandHandler(IRepository<CardTemplate> repository)
     {
         _repository = repository;
     }

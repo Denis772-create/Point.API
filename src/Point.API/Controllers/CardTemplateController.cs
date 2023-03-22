@@ -4,7 +4,7 @@ public class CardTemplateController : BaseController
 {
     [ProducesResponseType(typeof(CardTemplateDto), 200)]
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetOne([FromQuery] Guid id, CancellationToken ct = default)
+    public async Task<IActionResult> GetOne(Guid id, CancellationToken ct = default)
     {
         var result = await Mediator.Send(new GetCardTemplateQuery(id), ct);
 
@@ -23,20 +23,20 @@ public class CardTemplateController : BaseController
 
     [ProducesResponseType(typeof(CardTemplateDto), 200)]
     [HttpGet("image/{id:guid}")]
-    public async Task<IActionResult> GetOneImage([FromQuery] Guid id, CancellationToken ct = default)
+    public async Task<IActionResult> GetOneImage(Guid id, CancellationToken ct = default)
     {
-        var result = await Mediator.Send(new GetCardTemplateQuery(id), ct);
+        var result = await Mediator.Send(new GetImageQuery(id), ct);
 
         return result.Match<IActionResult>(Ok, BadRequest);
     }
 
-    [HttpPost("shared-image")]
+    [HttpPost("image")]
     public async Task<IActionResult> CreateImage([FromForm] ImageInput input, CancellationToken ct = default)
     {
         var result = await Mediator.Send(new AddImageCommand(input), ct);
 
         return await result.MatchAsync(
-            id => GetOne(id, ct),
+            id => GetOneImage(id, ct),
             validation => Task.FromResult<IActionResult>(BadRequest(validation)));
     }
 }

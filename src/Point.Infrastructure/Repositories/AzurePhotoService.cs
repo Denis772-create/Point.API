@@ -10,14 +10,14 @@ public class AzurePhotoService : IPhotoService
     public AzurePhotoService()
     {
         // TODO: options
-        var connectionString = "AzureBlobStorage";
+        var connectionString = "DefaultEndpointsProtocol=https;AccountName=point2132;AccountKey=lF9wp40L07J0+lZ0xdE1s2kNO6Q0CgbDiEvJmYVQGaclcIATqNfxnOOjEAPn3BFBaUklFcJM3caL+AStSh09gA==;EndpointSuffix=core.windows.net";
         _blobServiceClient = new BlobServiceClient(connectionString);
-        _containerName = "BlobContainerName";
-        _accountName = "AzureBlobStorageAccountName";
-        _accountKey = "AzureBlobStorageAccountKey";
+        _containerName = "scripts";
+        _accountName = "point2132";
+        _accountKey = "lF9wp40L07J0+lZ0xdE1s2kNO6Q0CgbDiEvJmYVQGaclcIATqNfxnOOjEAPn3BFBaUklFcJM3caL+AStSh09gA==";
     }
 
-    public async Task<IEnumerable<string>> GetPhotoUrlsAsync(Guid[] ids)
+    public async Task<IEnumerable<string>> GetPhotoUrlsAsync(Guid[] ids, CancellationToken ct)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
 
@@ -26,7 +26,7 @@ public class AzurePhotoService : IPhotoService
         {
             var blobClient = containerClient.GetBlobClient($"{id}.jpg");
 
-            if (await blobClient.ExistsAsync())
+            if (await blobClient.ExistsAsync(ct))
             {
                 tasks.Add(Task.FromResult(GetBlobUrlWithSasToken(blobClient)));
             }
@@ -35,20 +35,20 @@ public class AzurePhotoService : IPhotoService
         return await Task.WhenAll(tasks);
     }
 
-    public async Task<string> GetPhotoUrlByIdAsync(Guid id)
+    public async Task<string?> GetPhotoUrlByIdAsync(Guid id, CancellationToken ct)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         var blobClient = containerClient.GetBlobClient($"{id}.jpg");
 
-        if (!await blobClient.ExistsAsync())
+        if (!await blobClient.ExistsAsync(ct))
         {
-            throw new ArgumentException($"Photo with ID {id} does not exist.");
+            return null;
         }
 
         return GetBlobUrlWithSasToken(blobClient);
     }
 
-    public async Task<Guid> AddPhotoAsync(IFormFile photo)
+    public async Task<Guid> AddPhotoAsync(IFormFile photo, CancellationToken ct)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         var photoId = Guid.NewGuid();
@@ -60,18 +60,18 @@ public class AzurePhotoService : IPhotoService
             {
                 ContentType = photo.ContentType
             }
-        });
+        }, ct);
 
         return photoId;
     }
 
-    public async Task<bool> RemovePhotoAsync(Guid id)
+    public async Task<bool> RemovePhotoAsync(Guid id, CancellationToken ct)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         var blobName = $"{id}.jpg";
         var blobClient = containerClient.GetBlobClient(blobName);
 
-        var response = await blobClient.DeleteIfExistsAsync();
+        var response = await blobClient.DeleteIfExistsAsync(cancellationToken: ct);
 
         return response.Value;
     }
