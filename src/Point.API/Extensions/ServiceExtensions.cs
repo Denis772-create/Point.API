@@ -67,30 +67,30 @@ public static class ServiceExtensions
         var logger = services.GetRequiredService<ILogger<TContext>>();
         var context = services.GetService<TContext>();
 
-        try
-        {
-            logger.LogInformation($"Migrating database associated with context {typeof(TContext).Name}");
+        //try
+        //{
+        //    logger.LogInformation($"Migrating database associated with context {typeof(TContext).Name}");
 
-            var retry = Policy.Handle<SqlException>()
-                .WaitAndRetry(new[]
-                {
-                    TimeSpan.FromSeconds(3),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(8),
-                });
+        //    var retry = Policy.Handle<SqlException>()
+        //        .WaitAndRetry(new[]
+        //        {
+        //            TimeSpan.FromSeconds(3),
+        //            TimeSpan.FromSeconds(5),
+        //            TimeSpan.FromSeconds(8),
+        //        });
 
-            retry.Execute(() =>
-            {
-                context.Database.Migrate();
-                seeder(context);
-            });
+        //    retry.Execute(() =>
+        //    {
+        //        context.Database.Migrate();
+        //        seeder(context);
+        //    });
 
-            logger.LogInformation($"Migrated database associated with context {typeof(TContext).Name}");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"An error occurred while migrating the database used on context {nameof(TContext)}");
-        }
+        //    logger.LogInformation($"Migrated database associated with context {typeof(TContext).Name}");
+        //}
+        //catch (Exception ex)
+        //{
+        //    logger.LogError(ex, $"An error occurred while migrating the database used on context {nameof(TContext)}");
+        //}
 
         return host;
     }

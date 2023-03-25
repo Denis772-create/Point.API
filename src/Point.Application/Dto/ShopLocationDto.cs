@@ -1,10 +1,19 @@
-﻿namespace Point.Application.Dto;
+﻿using Point.Application.Attributes;
+
+namespace Point.Application.Dto;
 
 public class ShopLocationDto
 {
+    [ContentValidation(30)]
     public string Street { get; set; }
+
+    [ContentValidation(30)]
     public string City { get; set; }
+
+    [ContentValidation(30)]
     public string Country { get; set; }
+
+    [ContentValidation(8)]
     public string ZipCode { get; set; }
     public string BuildingNumber { get; set; }
     public int EntranceNumber { get; set; }
